@@ -4,6 +4,9 @@ const database=require("./database");
 
 const booky=express();
 
+booky.use(express.urlencoded());
+booky.use(express.json());
+
 booky.get("/",(req,res)=>{
     return res.json({book:database.books})
 });
@@ -96,6 +99,26 @@ booky.get('/pb/:book',(req,res)=>{
     }
     return res.json({publication:get_book_publication});
 });
+
+//POST
+
+booky.post('/book/new',(req,res)=>{
+    const new_book=req.body;
+    database.books.push(new_book);
+    return res.json({updated:database.books});
+});
+
+booky.post('/author/new',(req,res)=>{
+    const new_author=req.body;
+    database.author.push(new_author);
+    return res.json({updated:database.author})
+})
+
+booky.post('/publication/new',(req,res)=>{
+    const new_publication=req.body;
+    database.publication.push(new_publication);
+    return res.json({updated:database.publication});
+})
 
 booky.listen(3000,()=>{
     console.log("server is up and running in port 3000");
