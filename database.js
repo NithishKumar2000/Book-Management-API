@@ -1,41 +1,40 @@
-const books=[
+const books = [
     {
-        ISBN: "123Book",
-        title: "Tesla",
-        pub_date: "2021-08-09",
-        language: "en",
-        num_page: 200,
-        author: [1,2],
-        publication: 1,
-        category: ["tech","space","education"]
+      ISBN: "12345Book",
+      title: "Tesla!!!",
+      pubDate: "2021-08-05",
+      language: "en",
+      numPage: 250,
+      author: [1,2],
+      publications: [1],
+      category: ["tech","space","education"]
     }
-]
-
-const author=[
+  ]
+  
+  const author = [
     {
-        id: 1,
-        name: "Nithish",
-        books: ["123Books","234Books"]
+      id: 1,
+      name: "Aradhana",
+      books: ["12345Book", "secretBook"]
     },
     {
-        id: 2,
-        name: "Elon Musk",
-        books: ["123Books"]
+      id: 2,
+      name: "Elon Musk",
+      books: ["12345Book"]
     }
-]
-
-const publication= [
+  ]
+  
+  const publication = [
     {
-        id: 1,
-        name: "writex",
-        books: ["123Books"]
+      id: 1,
+      name: "writex",
+      books: ["12345Book"]
     },
     {
-        id: 2,
-        name: "sitex",
-        books: ["234Books"]
+      id: 2,
+      name: "writex2",
+      books: []
     }
-] 
-
-
-module.exports={books,author,publication};
+  ]
+  
+  module.exports = {books , author , publication};
