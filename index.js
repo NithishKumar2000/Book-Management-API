@@ -119,69 +119,63 @@ booky.post('/publication/new',async(req,res)=>{
 
 //Update with PUT
 
-booky.put("/publication/update/book/:isbn", (req,res) => {
-    database.publication.forEach((pub) => {
-      if(pub.id === req.body.pubId) {
-        return pub.books.push(req.params.isbn);
-      }
-    });
-  
-    
-    database.books.forEach((book) => {
-      if(book.ISBN === req.params.isbn) {
-        book.publications = req.body.pubId;
-        return;
-      }
-    });
-  
-    return res.json(
-      {
-        books: database.books,
-        publications: database.publication,
-        message: "Successfully updated publications"
-      }
-    );
-  });
+booky.put("/publication/update/book/:isbn", async(req,res) => {
+  const updated_book= await bookModel.findOneAndUpdate(
+    {
+      ISBN: req.params.isbn,
+    },
+    {
+        title: req.body.book_title
+    },
+    {
+      new: true
+    }
+  );
+  return res.json({books:updated_book})
+});
 
-  booky.delete('/book/delete/:isbn',(req,res)=>{
-      const new_book_list=database.books.filter(
-          (book)=>book.ISBN!==req.params.isbn
-      )
 
-      database.book=new_book_list;
-      return res.json({books:database.books});
-  });
 
-  booky.delete("/book/delete/author/:isbn/:authorId", (req,res) => {
-    //Update the book database
-     database.books.forEach((book)=>{
-       if(book.ISBN === req.params.isbn) {
-         const newAuthorList = book.author.filter(
-           (eachAuthor) => eachAuthor !== parseInt(req.params.authorId)
-         );
-         book.author = newAuthorList;
-         return;
-       }
-     });
+booky.put("/book/author/update/:isbn", async(req,res)=>{
+  const updated_book= await bookModel.findOneAndUpdate(
+    {
+      ISBN: req.params.isbn
+    },
+    {
+      $addToSet:{
+        author: req.body.new_author}
+      
+    },
+    {
+      new: true
+    }
+  );
   
-  
-    
-    database.author.forEach((eachAuthor) => {
-      if(eachAuthor.id === parseInt(req.params.authorId)) {
-        const newBookList = eachAuthor.books.filter(
-          (book) => book !== req.params.isbn
-        );
-        eachAuthor.books = newBookList;
-        return;
+  const updated_author= await authorModel.findOneAndUpdate(
+    {
+      id: req.body.new_author
+    },
+    {
+      $addToSet: {
+        author: req.params.isbn
       }
-    });
-  
-    return res.json({
-      book: database.books,
-      author: database.author,
-      message: "Author was deleted!!!!"
-    });
-  });
+    },
+    {
+      new: true
+    }
+  );
+
+  return res.json(
+    {
+      books: updated_book,
+      authors :updated_author,
+      message: "author was added"
+    }
+  );
+});
+
+
+
 
 booky.listen(3000,()=>{
     console.log("server is up and running in port 3000");
