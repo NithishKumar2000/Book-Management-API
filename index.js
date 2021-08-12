@@ -174,7 +174,17 @@ booky.put("/book/author/update/:isbn", async(req,res)=>{
   );
 });
 
-
+booky.delete("/book/delete/:isbn", async (req,res)=>{
+  const updated_book_database=await bookModel.findByIdAndDelete(
+    {
+      ISBN: req.params.isbn
+    },
+  );
+  return res.json({
+    books:updated_book_database,
+    message: "Book Deleted!!!"
+  });
+});
 
 
 booky.listen(3000,()=>{
